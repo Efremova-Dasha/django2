@@ -1,0 +1,66 @@
+from news.models import User
+User.objects.create_user('kotenok')
+User.objects.create_user('ytenok')
+from news.models import Author
+Author.objects.create(user_id=1, user_rating=5)
+Author.objects.create(user_id=2, user_rating=5)
+from news.models import Category
+Category.objects.create(category_name="Спорт")
+Category.objects.create(category_name="Политика")
+Category.objects.create(category_name="Образование")
+Category.objects.create(category_name="Погода")
+from news.models import Post
+author1=Author.objects.get(pk=1)
+ p1 = Post.objects.create(author=author1, title='krya-krya', content='krya')
+ p1.save()
+catego1=Category.objects.get(pk=1)
+>>> catego2=Category.objects.get(pk=2)
+>>> catego3=Category.objects.get(pk=3)
+>>> catego4=Category.objects.get(pk=4)
+>>> catego1.save()
+>>> catego2.save()
+>>> catego3.save()
+>>> catego4.save()
+>>> p1.category.add(catego1, catego2)
+>>> p1.save()
+p2 = Post.objects.create(author=author2, title='mur-mur', content='mur')
+>>> p2.save()
+>>> p2.category.add(catego3, catego4)
+>>> p2.save()
+>>> p3 = Post.objects.create(author=author2, types="Статья", title='myyyyy', content='myyy')
+>>> p3.save()
+>>> p3.category.add(catego3, catego4)
+from news.models import Comment
+Comment.objects.create(post=Post.objects.get(pk=1), user=User.objects.get(pk=1), comment_text='aaaaa')
+ Comment.objects.create(post=Post.objects.get(pk=2), user=User.objects.get(pk=1), comment_text='eeee')
+Comment.objects.create(post=Post.objects.get(pk=1), user=User.objects.get(pk=1), comment_text='yyyyyy')
+Comment.objects.create(post=Post.objects.get(pk=1), user=User.objects.get(pk=1), comment_text='meee')
+>>> p1.like()
+>>> p2.like()
+>>> p3.like()
+>>> p1.like()
+post_best = Post.objects.order_by('-rating').first()
+post_best.preview()
+'krya...'
+post_best.title
+'krya-krya'
+ post_best.rating
+2
+post_best.author.user.username
+'kotenok'
+coco=Comment.objects.filter(post=p1)
+>>> coco
+<QuerySet [<Comment: Comment object (1)>, <Comment: Comment object (3)>, <Comment: Comment object (4)>]>
+>>> coco[1].user
+<User: kotenok>
+>>> coco[1].comment_rating
+0
+>>> coco[1].comment_create
+datetime.datetime(2023, 2, 10, 19, 57, 37, 384773, tzinfo=datetime.timezone.utc)
+>>> Comment.objects.filter(post=p1).order_by("-comment_rating").values("user", "comment_text", "comment_create", "comment_rating")
+<QuerySet [{'user': 1, 'comment_text': 'aaaaa', 'comment_create': datetime.datetime(2023, 2, 10, 19, 56, 24, 779619, tzinfo=datetime.timezone.utc), 'comment_rati
+ng': 0}, {'user': 1, 'comment_text': 'yyyyyy', 'comment_create': datetime.datetime(2023, 2, 10, 19, 57, 37, 384773, tzinfo=datetime.timezone.utc), 'comment_ratin
+g': 0}, {'user': 1, 'comment_text': 'meee', 'comment_create': datetime.datetime(2023, 2, 10, 19, 57, 49, 19385, tzinfo=datetime.timezone.utc), 'comment_rating':
+0}]>
+
+
