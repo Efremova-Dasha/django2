@@ -7,7 +7,6 @@ class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_rating = models.IntegerField(default=0)
 
-
     def update_rating(self):
         rating_posts_author = Post.objects.filter(author_id=self.pk).aggregate(rating=Sum('rating'))['rating']
         rating_comments_author = Comment.objects.filter(user_id=self.user).aggregate(comment_rating=Sum('comment_rating'))['comment_rating']
@@ -29,6 +28,9 @@ class Category(models.Model):
     ]
 
     category_name = models.CharField(max_length=2, choices=CATEGORY_TYPES, default=sport, unique=True)
+
+    def __str__(self):
+        return self.category_name.title()
 
 
 class Post(models.Model):
@@ -59,6 +61,9 @@ class Post(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+    def __str__(self):
+        return f'{self.title[:20]}: {self.content[:20]}'
 
 
 class PostCategory(models.Model):

@@ -1,0 +1,30 @@
+{% extends 'flatpages/default.html' %}
+
+{% load censor_filters %}
+
+{% block title %}
+Post
+{% endblock title %}
+
+{% block content %}
+    <h1>Новость дня!</h1>
+    <hr>
+    {% if post %}
+        <table>
+            <tr>
+                <td>название</td>
+                <td>дата публикации</td>
+                <td>содержание</td>
+            </tr>
+
+            <tr>
+                <td>{{ post.title }}</td>
+                <td>{{ post.time_date|date:'d M Y' }}</td>
+                <td>{{ post.content|censor }}</td>
+            </tr>
+
+        </table>
+    {% else %}
+        <h2>Упс! Ее нет!</h2>
+    {% endif %}
+{% endblock content %}
