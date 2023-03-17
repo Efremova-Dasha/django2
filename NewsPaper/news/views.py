@@ -51,7 +51,7 @@ class NewsCreate(CreateView):
 
     def form_valid(self, form):
         news = form.save(commit=False)
-        news.article_or_news = 'NEWS'
+        news.types = 'NEWS'
         return super().form_valid(form)
 
 
@@ -62,33 +62,39 @@ class ArticlesCreate(CreateView):
 
     def form_valid(self, form):
         news = form.save(commit=False)
-        news.article_or_news = Post.news
+        news.types = 'ARTI'
         return super().form_valid(form)
 
 
 class NewsUpdate(UpdateView):
     form_class = PostForm
     model = Post
-    queryset = Post.objects.filter(types='NEWS')
     template_name = 'post_edit.html'
+
+    def form_valid(self, form):
+        news = form.save(commit=False)
+        news.types = 'NEWS'
+        return super().form_valid(form)
 
 
 class ArticlesUpdate(UpdateView):
     form_class = PostForm
     model = Post
-    queryset = Post.objects.filter(types='ARTI')
     template_name = 'post_edit.html'
+
+    def form_valid(self, form):
+        news = form.save(commit=False)
+        news.types = 'ARTI'
+        return super().form_valid(form)
 
 
 class NewsDelete(DeleteView):
     model = Post
     template_name = 'post_delete.html'
-    success_url = reverse_lazy('news_list')
-    queryset = Post.objects.filter(types='NEWS')
+    success_url = reverse_lazy('post_list')
 
 
 class ArticlesDelete(DeleteView):
     model = Post
     template_name = 'post_delete.html'
-    success_url = reverse_lazy('news_list')
-    queryset = Post.objects.filter(types='ARTI')
+    success_url = reverse_lazy('post_list')

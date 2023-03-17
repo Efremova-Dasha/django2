@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django_filters import DateFilter
 
 from .models import Post
 
