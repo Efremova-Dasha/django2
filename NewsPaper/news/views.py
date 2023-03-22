@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 from django.urls import reverse_lazy
 from datetime import datetime
 
@@ -42,6 +44,10 @@ class PostDetail(DetailView):
         context['time_now'] = datetime.utcnow()
         context['next_sale'] = None
         return context
+
+
+class ProtectedView(LoginRequiredMixin, TemplateView):
+    template_name = 'post_edit.html'
 
 
 class NewsCreate(CreateView):
