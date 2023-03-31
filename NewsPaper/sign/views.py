@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 class BaseRegisterView(CreateView):
     model = User
     form_class = BaseRegisterForm
-    success_url = '/'
+    success_url = '/post/'
 
 
 @login_required
@@ -19,4 +19,4 @@ def upgrade_me(request):
     author_group = Group.objects.get(name='authors')
     if not request.user.groups.filter(name='authors').exists():
         author_group.user_set.add(user)
-    return redirect('/')
+    return redirect('/post/')

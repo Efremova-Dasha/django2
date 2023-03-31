@@ -29,6 +29,7 @@ class Category(models.Model):
     ]
 
     category_name = models.CharField(max_length=2, choices=CATEGORY_TYPES, default=sport, unique=True)
+    subscribers = models.ManyToManyField(User, related_name='categories')
 
     def __str__(self):
         return self.category_name.title()
