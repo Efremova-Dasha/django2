@@ -1,9 +1,9 @@
+from celery import shared_task
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import m2m_changed
-from django.dispatch import receiver
 from django.template.loader import render_to_string
 
-from .models import PostCategory
+from NewsPaper.news.models import PostCategory
 
 
 def send_notifications(preview, pk, title, subscribers):
@@ -27,7 +27,8 @@ def send_notifications(preview, pk, title, subscribers):
     msg.send()
 
 
-@receiver(m2m_changed, sender=PostCategory)
+#@receiver(m2m_changed, sender=PostCategory)
+@shared_task(m2m_changed, sender=PostCategory)
 def notify_about_new_post(sender, instanse, **kwargs):
     if kwargs['action'] == 'post_add':
         categories = instanse.category.all()

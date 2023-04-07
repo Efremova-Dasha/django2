@@ -161,7 +161,7 @@ SITE_URL = 'http://127.0.0.1:8000'
 EMAIL_HOST = 'smpt.yandex.ru'
 EMAIL_POST = 465
 EMAIL_HOST_USER = 'd.efre44'
-EMAIL_HOST_PASSWORD = 'udTdp2ETxY'
+EMAIL_HOST_PASSWORD = 'нужно создать этот файл'
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
@@ -169,3 +169,12 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 
 APSCHEDULER_RUN_NOW_TIMEOUT = 25
+
+CELERY_BROKER_URL = 'redis://default:wGtgIZGNUg1SSHAHdabAspeulk75qLTg@redis-11696.c74.us-east-1-4.ec2.cloud.redislabs.com:11696'
+CELERY_RESULT_BACKEND = 'redis://default:wGtgIZGNUg1SSHAHdabAspeulk75qLTg@redis-11696.c74.us-east-1-4.ec2.cloud.redislabs.com:11696'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+#redis-cli -u redis://default:wGtgIZGNUg1SSHAHdabAspeulk75qLTg@
+#redis-11696.c74.us-east-1-4.ec2.cloud.redislabs.com:11696
