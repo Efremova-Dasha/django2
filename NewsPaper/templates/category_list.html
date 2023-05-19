@@ -1,10 +1,15 @@
 {% extends 'flatpages/default.html' %}
+{% load i18n %}
 
 {% load censor_filters %}
 
 {% block title %}
 category_news_list
 {% endblock title %}
+
+{% load cache %}
+{% cache 60 menu sidebar %}
+{% endcache %}
 
 {% block content %}
     <h1>Все новости</h1>

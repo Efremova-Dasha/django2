@@ -1,4 +1,8 @@
 {% extends "main.html" %}
+{% load i18n %}
+{% load cache %}
+{% cache 60 menu sidebar %}
+{% endcache %}
 
 {% block content %}
 <h2> Войти в систему </h2>

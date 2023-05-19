@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load i18n %}
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -9,3 +11,6 @@
 <p>{{ text }}</p>
 </body>
 </html>
+{% load cache %}
+{% cache 60 menu sidebar %}
+{% endcache %}

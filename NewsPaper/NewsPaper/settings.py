@@ -11,9 +11,15 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+import logging.config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
+logger = logging.getLogger('NewsPaper.news.NewsPaper')
 
 
 # Quick-start development settings - unsuitable for production
@@ -128,6 +134,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+LANGUAGES = [
+    ('en-us', 'English'),
+    ('ru', 'Русский')
+]
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -149,6 +160,10 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/home/'
+LOGOUT_REDIRECT = '/post/'
+
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
@@ -165,9 +180,13 @@ EMAIL_HOST_PASSWORD = 'нужно создать этот файл'
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+ADMINS = [
+    ('я опять забыла админку', 'dsavcuk921@gmail.com')
+]
+
+SERVER_EMAIL = 'd.efre44@yandex.com'
 
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
-
 APSCHEDULER_RUN_NOW_TIMEOUT = 25
 
 CELERY_BROKER_URL = 'redis://default:wGtgIZGNUg1SSHAHdabAspeulk75qLTg@redis-11696.c74.us-east-1-4.ec2.cloud.redislabs.com:11696'
@@ -178,3 +197,100 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 #redis-cli -u redis://default:wGtgIZGNUg1SSHAHdabAspeulk75qLTg@
 #redis-11696.c74.us-east-1-4.ec2.cloud.redislabs.com:11696
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
+    },
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        "for_debug_and_above": {
+            'format': '%(asctime)s %(levelname)s %(message)s',
+        },
+        "for_warning_and_above": {
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s',
+        },
+        "for_critical_and_above": {
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s %(exc_info)s',
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'for_debug_and_above'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True
+        },
+        'for_general': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'for_debug_and_above',
+            'filename': 'general.log',
+        },
+        'for_errors': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'for_critical_and_above',
+            'filename': 'errors.log',
+        },
+        'for_security': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'for_warning_and_above',
+            'filename': 'security.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'for_general'],
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['for_errors', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.server': {
+            'handlers': ['for_errors', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.template': {
+            'handlers': ['for_errors'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['for_errors'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['for_security'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    }
+}
+
+logging.config.dictConfig(LOGGING)
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale')
+]
